@@ -6,7 +6,12 @@ from os import sep                # OS specific file path separators
 from math import log10, sqrt      # import necessary math functions
 
 # load the dynamic library, get constants path (the path is OS specific)
-dwf = ctypes.CDLL("./libdwf.so")
+if platform.startswith("win"):
+    # on Windows
+    dwf = ctypes.CDLL("./dwf.dll")
+else:
+    # on Linux
+    dwf = ctypes.CDLL("./libdwf.so")
 
 
 
