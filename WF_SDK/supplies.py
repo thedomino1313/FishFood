@@ -7,10 +7,10 @@ from os import sep                # OS specific file path separators
 # load the dynamic library, get constants path (the path is OS specific)
 if platform.startswith("win"):
     # on Windows
-    dwf = ctypes.CDLL("./dwf.dll")
+    dwf = ctypes.CDLL("./libraries/dwf.dll")
 else:
     # on Linux
-    dwf = ctypes.CDLL("./libdwf.so")
+    dwf = ctypes.CDLL("./libraries/libdwf.so")
 
 
 

@@ -14,7 +14,7 @@ elif platform.startswith("darwin"):
     dwf = ctypes.cdll.LoadLibrary("/Library/Frameworks/dwf.framework/dwf")
 else:
     # on Linux
-    dwf = ctypes.CDLL("./libdwf.so")
+    dwf = ctypes.CDLL("./libraries/libdwf.so")
 
 """
 
@@ -28,10 +28,10 @@ import inspect                    # caller function data
 # load the dynamic library, get constants path (the path is OS specific)
 if platform.startswith("win"):
     # on Windows
-    dwf = ctypes.CDLL("./dwf.dll")
+    dwf = ctypes.CDLL("./libraries/dwf.dll")
 else:
     # on Linux
-    dwf = ctypes.CDLL("./libdwf.so")
+    dwf = ctypes.CDLL("./libraries/libdwf.so")
 
 
 
