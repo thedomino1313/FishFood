@@ -15,7 +15,7 @@ else:
 
 
 
-import dwfconstants as constants
+import libraries.dwfconstants as constants
 from WF_SDK.device import check_error, warning
 
 """-----------------------------------------------------------------------"""

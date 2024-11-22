@@ -35,7 +35,7 @@ else:
 
 
 
-import dwfconstants as constants
+import libraries.dwfconstants as constants
 
 """-----------------------------------------------------------------------"""
 
