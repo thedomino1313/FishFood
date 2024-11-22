@@ -33,7 +33,7 @@ def rotate(delay, steps, analog_device: AnalogIO, clockwise=True):
         time.sleep(delay)
 
 if __name__ == "__main__":
-    uvicorn.run("frontend.app:app",host="localhost", port = 8000,reload=True)
+    uvicorn.run("frontend.app:app",host="localhost", port = 8001,reload=True)
     # try:
     #     analog = AnalogIO()
 
