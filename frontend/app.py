@@ -1,12 +1,43 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.responses import RedirectResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
+from pydantic import BaseModel
+from stepper import Stepper
 
-app = FastAPI()
+class status(BaseModel):
+    value: bool
 
-app.mount('/frontend/static', StaticFiles(directory='frontend/static', html=True), name='static')
+good = status(value=True)
+bad  = status(value=False)
+
+async def not_found(request, exc):
+    return RedirectResponse("http://domlaptop:8001/feedthe.fish/404.html")
+
+
+exceptions = {
+    404: not_found,
+}
+
+app = FastAPI(exception_handlers=exceptions)
+
+app.mount('/feedthe.fish', StaticFiles(directory='frontend/static', html=True), name='static')
+
+stepper = Stepper()
+
 
 @app.get("/")
-@app.get("/temp")
+@app.get("/feedthe.fish")
 async def response():
-    return RedirectResponse("http://127.0.0.1:8001/frontend/static/temp.html")
+    return RedirectResponse("http://domlaptop:8001/feedthe.fish/rotate.html")
+
+# @app.get("/{value}")
+# async def uhoh():
+#     return RedirectResponse("http://domlaptop:8001/feedthe.fish/rotate.html")
+
+@app.post("/rotate", response_model=status)
+async def rotate():
+    try:
+        stepper.rotate(1, 2)
+        return good
+    except:
+        return bad
