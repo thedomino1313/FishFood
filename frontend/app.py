@@ -2,6 +2,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.responses import RedirectResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
+from contextlib import asynccontextmanager
 from stepper import Stepper
 
 class status(BaseModel):
@@ -18,11 +19,17 @@ exceptions = {
     404: not_found,
 }
 
-app = FastAPI(exception_handlers=exceptions)
+stepper = Stepper()
+
+@asynccontextmanager
+async def lifespan(_):
+    yield
+    stepper.disconnect()
+    print("Disconnected Stepper")
+
+app = FastAPI(exception_handlers=exceptions, lifespan=lifespan)
 
 app.mount('/feedthe.fish', StaticFiles(directory='frontend/static', html=True), name='static')
-
-stepper = Stepper()
 
 
 @app.get("/")
@@ -39,5 +46,6 @@ async def rotate():
     try:
         stepper.rotate(1, 2)
         return good
-    except:
+    except Exception as e:
+        print(e)
         return bad
