@@ -1,5 +1,6 @@
 import time
 from discovery import AnalogIO
+import uvicorn
 
 # Define constants
 DEG_PER_STEP = 1.8
@@ -32,22 +33,23 @@ def rotate(delay, steps, analog_device: AnalogIO, clockwise=True):
         time.sleep(delay)
 
 if __name__ == "__main__":
-    try:
-        analog = AnalogIO()
+    uvicorn.run("frontend.app:app",host="localhost", port = 8000,reload=True)
+    # try:
+    #     analog = AnalogIO()
 
-        # # Set the delay between steps
-        delay = 1
+    #     # # Set the delay between steps
+    #     delay = 1
 
-        # while True:
-        #     # Rotate one revolution forward (clockwise)
-        rotate(delay, 2, analog, clockwise=True)
+    #     # while True:
+    #     #     # Rotate one revolution forward (clockwise)
+    #     rotate(delay, 2, analog, clockwise=True)
 
-        # Pause for 2 seconds
-        time.sleep(2)
+    #     # Pause for 2 seconds
+    #     time.sleep(2)
 
-        # Rotate one revolution backward (anticlockwise)
-        rotate(delay, 2, analog, clockwise=False)
+    #     # Rotate one revolution backward (anticlockwise)
+    #     rotate(delay, 2, analog, clockwise=False)
         
-        analog.disconnect()
-    except KeyboardInterrupt:
-        analog.disconnect()
+    #     analog.disconnect()
+    # except KeyboardInterrupt:
+    #     analog.disconnect()
