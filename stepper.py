@@ -19,7 +19,6 @@ class Stepper:
     
     def __init__(self):
         self.analog = AnalogIO()
-        self.on = False
 
     # Function to rotate the stepper motor one step
     def step(self, step_sequence, delay):
@@ -33,10 +32,6 @@ class Stepper:
         for _ in range(steps):
             for code in (Stepper.seq if clockwise else Stepper.seq[::-1]):
                 self.step(code, delay)
-
-    def power(self):
-        self.analog.supply_on()
-        self.on = True
 
     def disconnect(self):
         self.analog.disconnect()

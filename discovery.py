@@ -49,14 +49,8 @@ class AnalogIO:
     def read_digital_signal(self, bit:int=8):
         return static.get_state(self.device_data, bit)
 
-    def supply_on(self, channel:int=1, volts:int=5):
-        volts = min(volts, 5)
-        wavegen.generate(device_data=self.device_data, channel=channel, function=wavegen.function.dc, offset=volts)
-
     def disconnect(self):
         static.close(self.device_data)
-        wavegen.disable(self.device_data, 1)
-        wavegen.disable(self.device_data, 2)
         
         # stop and reset the power supplies
         self.supplies_data.master_state = False
