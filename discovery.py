@@ -51,8 +51,8 @@ class AnalogIO:
 
     def supply_on(self, channel:int=1, volts:int=5):
         volts = min(volts, 5)
-
         wavegen.generate(device_data=self.device_data, channel=channel, function=wavegen.function.dc, offset=volts)
+
     def disconnect(self):
         static.close(self.device_data)
         wavegen.disable(self.device_data, 1)

@@ -11,21 +11,25 @@ class status(BaseModel):
 good = status(value=True)
 bad  = status(value=False)
 
-async def not_found(request, exc):
-    return RedirectResponse("http://domlaptop:8001/feedthe.fish/404.html")
+async def not_found(*_):
+    return RedirectResponse("http://173.76.226.127:7154/feedthe.fish/404.html")
 
 
 exceptions = {
     404: not_found,
 }
 
-stepper = Stepper()
+try:
+    stepper = Stepper()
+except:
+    stepper = None
 
 @asynccontextmanager
 async def lifespan(_):
     yield
-    stepper.disconnect()
-    print("Disconnected Stepper")
+    if stepper:
+        stepper.disconnect()
+        print("Disconnected Stepper")
 
 app = FastAPI(exception_handlers=exceptions, lifespan=lifespan)
 
@@ -35,17 +39,31 @@ app.mount('/feedthe.fish', StaticFiles(directory='frontend/static', html=True), 
 @app.get("/")
 @app.get("/feedthe.fish")
 async def response():
-    return RedirectResponse("http://domlaptop:8001/feedthe.fish/rotate.html")
+    if stepper:
+        return RedirectResponse("http://173.76.226.127:7154/feedthe.fish/rotate.html")
+    else:
+        return RedirectResponse("http://173.76.226.127:7154/feedthe.fish/connection.html")
 
-# @app.get("/{value}")
-# async def uhoh():
-#     return RedirectResponse("http://domlaptop:8001/feedthe.fish/rotate.html")
 
 @app.post("/rotate", response_model=status)
 async def rotate():
     try:
-        stepper.rotate(1, 2)
+        stepper.rotate(0.01, int(Stepper.STEPS_PER_REVOLUTION/3))
         return good
     except Exception as e:
         print(e)
         return bad
+
+@app.post("/connect", response_model=status)
+async def rotate():
+    try:
+        stepper = Stepper()
+        return good
+    except Exception as e:
+        print(e)
+        stepper = None
+        return bad
+    
+@app.post("/stepper_diagnostic", response_model=status)
+async def diag():
+    return good if stepper else bad
