@@ -3,8 +3,7 @@ from discovery import AnalogIO
 
 class Stepper:
     # Define constants
-    DEG_PER_STEP = 1
-    STEPS_PER_REVOLUTION = int(360 / DEG_PER_STEP)
+    STEPS_PER_REVOLUTION = 510
     # Define sequence for 28BYJ-48 stepper motor
     seq = [
         [1, 1, 0, 0],
@@ -44,9 +43,8 @@ if __name__ == "__main__":
         # # Set the delay between steps
         delay = 0.01
 
-        # while True:
-        #     # Rotate one revolution forward (clockwise)
-        stepper.rotate(delay, Stepper.STEPS_PER_REVOLUTION, clockwise=True)
+        # Rotate one revolution forward (clockwise)
+        stepper.rotate(delay, 5, clockwise=False)
 
         # Pause for 2 seconds
         # time.sleep(2)

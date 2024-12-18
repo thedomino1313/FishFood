@@ -8,11 +8,16 @@ from stepper import Stepper
 class status(BaseModel):
     value: bool
 
+class offset(BaseModel):
+    offset: int 
+
 good = status(value=True)
 bad  = status(value=False)
+off  = offset(offset=0)
+
 
 async def not_found(*_):
-    return RedirectResponse("http://173.76.226.127:7154/feedthe.fish/404.html")
+    return RedirectResponse("http://domlaptop:7154/feedthe.fish/404.html")
 
 
 exceptions = {
@@ -40,15 +45,16 @@ app.mount('/feedthe.fish', StaticFiles(directory='frontend/static', html=True), 
 @app.get("/feedthe.fish")
 async def response():
     if stepper:
-        return RedirectResponse("http://173.76.226.127:7154/feedthe.fish/rotate.html")
+        return RedirectResponse("http://domlaptop:7154/feedthe.fish/rotate.html")
     else:
-        return RedirectResponse("http://173.76.226.127:7154/feedthe.fish/connection.html")
+        return RedirectResponse("http://domlaptop:7154/feedthe.fish/connection.html")
 
 
 @app.post("/rotate", response_model=status)
 async def rotate():
     try:
-        stepper.rotate(0.01, int(Stepper.STEPS_PER_REVOLUTION/3))
+        stepper.rotate(0.01, int(Stepper.STEPS_PER_REVOLUTION/28) + (1 if off.offset == 0 else 0))
+        off.offset = this if (this := off.offset + 1) <= 3 else 0
         return good
     except Exception as e:
         print(e)
